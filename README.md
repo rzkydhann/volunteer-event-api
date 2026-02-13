@@ -1,59 +1,343 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌱 Volunteer Event Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+REST API untuk sistem manajemen event volunteer, dibangun dengan **Laravel 12** + **MySQL** + **Laravel Sanctum**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Daftar Isi
+- [Tech Stack](#tech-stack)
+- [Persiapan Database MySQL](#persiapan-database-mysql)
+- [Cara Install](#cara-install)
+- [Cara Menjalankan](#cara-menjalankan)
+- [Daftar Endpoint API](#daftar-endpoint-api)
+- [Contoh Request & Response](#contoh-request--response)
+- [Pertanyaan Wajib](#pertanyaan-wajib)
+- [Catatan Desain](#catatan-desain)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠 Tech Stack
 
-## Learning Laravel
+| Komponen   | Pilihan              |
+|------------|---------------------|
+| Framework  | Laravel 12           |
+| PHP        | >= 8.2               |
+| Database   | MySQL (phpMyAdmin)   |
+| Auth       | Laravel Sanctum 4.x  |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🗄 Persiapan Database MySQL
 
-## Laravel Sponsors
+Sebelum install project, buat database dulu di **phpMyAdmin**:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. Buka phpMyAdmin → `http://localhost/phpmyadmin`
+2. Klik **"New"** di panel kiri
+3. Isi nama database: `volunteer_event`
+4. Collation: `utf8mb4_unicode_ci`
+5. Klik **"Create"**
 
-### Premium Partners
+> Tidak perlu buat tabel manual — Laravel akan buat otomatis via migration.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## ⚙️ Cara Install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Clone repository
+```bash
+git clone https://github.com/rzkydhann/volunteer-event-api.git
+cd volunteer-event-api
+```
 
-## Code of Conduct
+### 2. Install dependencies
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Salin file environment
+```bash
+cp .env.example .env
+```
 
-## Security Vulnerabilities
+### 4. Konfigurasi `.env` — sesuaikan dengan MySQL kamu
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=volunteer_event
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 5. Generate application key
+```bash
+php artisan key:generate
+```
 
-## License
+### 6. Install Laravel Sanctum
+```bash
+composer require laravel/sanctum
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 7. Jalankan migration
+```bash
+php artisan migrate
+```
+
+Cek phpMyAdmin — seharusnya sudah ada 4 tabel:
+- `users`
+- `personal_access_tokens`
+- `events`
+- `event_user`
+
+### 8. (Opsional) Jalankan seeder untuk data dummy
+```bash
+php artisan db:seed
+```
+
+Data yang dibuat:
+| Nama    | Email                   | Password    |
+|---------|------------------------|-------------|
+| Budi   | budi@example.com       | password123 |
+| Rizky     | rizky@example.com         | password123 |
+| Bagus | agus@example.com     | password123 |
+
+---
+
+## 🚀 Cara Menjalankan
+
+```bash
+php artisan serve
+```
+
+API tersedia di: **`http://volunteer-api.test/api/`**
+
+> ⚠️ **Penting:** Selalu sertakan header `Accept: application/json` di setiap request agar Laravel selalu mengembalikan JSON, bukan HTML.
+
+---
+
+## 📡 Daftar Endpoint API
+
+### Authentication
+
+| Method | Endpoint        | Auth | Deskripsi           |
+|--------|----------------|------|---------------------|
+| POST   | `/api/register` | ❌   | Registrasi user baru |
+| POST   | `/api/login`    | ❌   | Login                |
+| POST   | `/api/logout`   | ✅   | Logout               |
+| GET    | `/api/me`       | ✅   | Profil user aktif    |
+
+### Events
+
+| Method | Endpoint                  | Auth | Deskripsi             |
+|--------|--------------------------|------|------------------------|
+| GET    | `/api/events`             | ✅   | Daftar semua event     |
+| POST   | `/api/events`             | ✅   | Buat event baru        |
+| GET    | `/api/events/{id}`        | ✅   | Detail event           |
+| POST   | `/api/events/{id}/join`   | ✅   | Join event             |
+
+> ✅ = Wajib kirim header `Authorization: Bearer {token}`
+
+---
+
+## 📄 Contoh Request & Response
+
+### POST /api/register
+```json
+// Request Body
+{
+  "name": "Budi Santoso",
+  "email": "budi@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
+}
+
+// Response 201
+{
+  "success": true,
+  "message": "Registrasi berhasil.",
+  "data": {
+    "user": { "id": 1, "name": "Budi Santoso", "email": "budi@example.com" },
+    "token": "1|abc123xyz...",
+    "token_type": "Bearer"
+  }
+}
+```
+
+### POST /api/login
+```json
+// Request Body
+{ "email": "agus@example.com", "password": "password123" }
+
+// Response 200
+{
+  "success": true,
+  "message": "Login berhasil.",
+  "data": {
+    "user": { "id": 1, "name": "Agus Setiawan", "email": "agus@example.com" },
+    "token": "2|xyz789...",
+    "token_type": "Bearer"
+  }
+}
+```
+
+### GET /api/events
+```json
+// Response 200
+{
+  "success": true,
+  "message": "Daftar event berhasil diambil.",
+  "data": [
+    {
+      "id": 1,
+      "title": "Bersih-Bersih Pantai Ancol",
+      "description": "Mari bersama menjaga kebersihan pantai...",
+      "event_date": "2025-02-20 08:00:00",
+      "creator": { "id": 1, "name": "Agus Setiawan", "email": "agus@example.com" },
+      "total_participants": 2,
+      "created_at": "2025-02-13 10:00:00"
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 10,
+    "total": 3
+  }
+}
+```
+
+### POST /api/events/{id}/join — Sukses
+```json
+{
+  "success": true,
+  "message": "Berhasil bergabung ke event.",
+  "data": {
+    "event_id": 1,
+    "event_title": "Bersih-Bersih Pantai Ancol",
+    "event_date": "2025-02-20 08:00:00",
+    "user_id": 3,
+    "user_name": "Rizky Ananda Ramadhan",
+    "joined_at": "2025-02-13 11:30:00",
+    "total_participants": 3
+  }
+}
+```
+
+### Error — Sudah join
+```json
+{ "success": false, "message": "Kamu sudah terdaftar di event ini.", "data": null }
+```
+
+### Error — Validasi (422)
+```json
+{
+  "success": false,
+  "message": "Data yang dikirim tidak valid.",
+  "errors": {
+    "email": ["The email field is required."],
+    "password": ["The password must be at least 8 characters."]
+  }
+}
+```
+
+### Error — Unauthenticated (401)
+```json
+{ "success": false, "message": "Unauthenticated. Silakan login terlebih dahulu.", "data": null }
+```
+
+---
+
+## ❓ Pertanyaan Wajib
+
+### 1. Bagian tersulit dari assignment ini?
+
+Bagian yang paling membutuhkan perhatian adalah **konsistensi error handling** untuk seluruh endpoint. Secara default Laravel 12 mengembalikan HTML saat terjadi error (404, 401), bukan JSON. Di Laravel 12, override dilakukan langsung di `bootstrap/app.php` melalui `withExceptions()`, tidak lagi menggunakan `Handler.php` terpisah seperti versi sebelumnya — ini perlu pemahaman lebih tentang struktur baru Laravel 12.
+
+Selain itu, logika `join` event juga perlu penanganan berlapis: validasi keberadaan event, cek creator, cek sudah join, dan cek tanggal event sudah lewat apa belum.
+
+### 2. Jika diberi waktu 1 minggu, apa yang akan diperbaiki?
+
+- **Policy & Authorization** — hanya creator yang bisa edit/hapus event miliknya
+- **Fitur unjoin** — user bisa membatalkan keikutsertaan
+- **Filter & Search** — filter event berdasarkan tanggal, status (upcoming/past), keyword
+- **Rate Limiting** — batasi jumlah request per IP untuk mencegah abuse
+- **Soft Delete** — event diarsipkan, tidak langsung dihapus permanen
+- **Email Notifikasi** — reminder ke peserta mendekati tanggal event
+
+### 3. Kenapa memilih pendekatan teknis ini?
+
+- **Laravel Sanctum** dipilih karena sistemnya ringan dan tidak ribet. Sangat pas untuk aplikasi skala mahasiswa karena cara pakainya gampang: setelah login, kamu dapat "kunci" (token) yang bisa ditempel di Postman atau aplikasi HP buat akses fitur lainnya.
+- **MySQL** dipilih karena sudah tersedia via phpMyAdmin di environment lokal (XAMPP/WAMP/Laragon), handal untuk data relasional, dan mendukung foreign key constraint yang dibutuhkan relasi many-to-many.
+- **API Resource** (`EventResource`) Memusatkan transformasi data — ketika struktur response berubah, cukup edit di satu file.
+- **Pagination** diterapkan sejak awal di `GET /events` supaya aplikasi tidak lemot kalau data event-nya sudah ribuan. Jadi, datanya tidak dikirim semua sekaligus, tapi dicicil per halaman (misal 10 data per halaman).
+- **Pivot table `event_user`** adalah pendekatan standar Laravel untuk many-to-many, dengan unique constraint untuk mencegah duplikasi join.
+
+---
+
+## 🗂 Catatan Desain
+
+### Struktur Folder
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── AuthController.php    # register, login, logout, me
+│   │   └── EventController.php   # index, store, show, join
+│   └── Resources/
+│       └── EventResource.php     # format response event
+├── Models/
+│   ├── User.php                  # HasApiTokens + relasi
+│   └── Event.php                 # relasi creator & participants
+bootstrap/
+└── app.php                       # Laravel 12: routing + middleware + error handling
+config/
+├── auth.php
+├── database.php
+└── sanctum.php
+database/
+├── migrations/                   # 4 migration file
+└── seeders/
+    └── DatabaseSeeder.php
+routes/
+└── api.php
+```
+
+### Asumsi Desain
+1. Semua endpoint (kecuali register & login) membutuhkan autentikasi Bearer Token
+2. Creator event tidak bisa join event miliknya sendiri
+3. User tidak bisa join event yang tanggalnya sudah lewat
+4. Satu user hanya bisa join satu event sekali (dijaga oleh unique constraint di database)
+5. Semua response menggunakan format seragam: `{ success, message, data }`
+
+### Skema Database MySQL
+```
+users
+├── id           BIGINT UNSIGNED AUTO_INCREMENT PK
+├── name         VARCHAR(255)
+├── email        VARCHAR(255) UNIQUE
+├── password     VARCHAR(255)
+└── timestamps
+
+events
+├── id           BIGINT UNSIGNED AUTO_INCREMENT PK
+├── title        VARCHAR(255)
+├── description  TEXT
+├── event_date   DATETIME
+├── user_id      BIGINT UNSIGNED FK → users.id
+└── timestamps
+
+event_user (pivot)
+├── id           BIGINT UNSIGNED AUTO_INCREMENT PK
+├── event_id     BIGINT UNSIGNED FK → events.id
+├── user_id      BIGINT UNSIGNED FK → users.id
+├── UNIQUE       (event_id, user_id)
+└── timestamps
+
+personal_access_tokens (Sanctum)
+├── id           BIGINT UNSIGNED AUTO_INCREMENT PK
+├── tokenable_type + tokenable_id (polymorphic)
+├── name         VARCHAR(255)
+├── token        VARCHAR(64) UNIQUE
+└── timestamps
+```
