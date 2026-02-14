@@ -2,6 +2,9 @@
 
 REST API untuk sistem manajemen event volunteer, dibangun dengan **Laravel 12** + **MySQL** + **Laravel Sanctum**.
 
+Link Youtube
+https://youtu.be/O8FUWjDD3iM
+
 ---
 
 ## 📋 Daftar Isi
